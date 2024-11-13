@@ -1,5 +1,3 @@
-Here's a simple README.md for your bs-chat-app project:
-
 # bs-chat-app
 
 A basic (and arguably crappy) chat server built with Flask. This app provides a simple backend to handle user registration, login, and messaging functionality. The app includes a few endpoints for interaction and a basic client example script.
