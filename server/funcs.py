@@ -1,7 +1,7 @@
-import jwt, datetime, hashlib, random, make_sql as json, logging
+import jwt, datetime, hashlib, random, json_helper, logging
 log = logging.Logger(__name__)
-usermgr = json.JSONManager("./users.json")
-msgmgr = json.JSONManager("./conversations.json")
+usermgr = json_helper.JSONManager("./users.json")
+msgmgr = json_helper.JSONManager("./conversations.json")
 def generate_token(username:str, SECRET_KEY:str|bytes):
     expiration = datetime.datetime.utcnow() + datetime.timedelta(days=30)
     token = jwt.encode({'username': username, 'exp': expiration}, SECRET_KEY, algorithm="HS256")
