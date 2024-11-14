@@ -121,5 +121,5 @@ def addconv():
     """THIS feels WAY TOO EASY"""
     """I swear it isn't done, yet it looks like it is.."""
     """I think I'm going insane."""
-app.run()
+
 socketio.run(app=app, host="0.0.0.0", port=39472, debug=True)

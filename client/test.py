@@ -2,11 +2,10 @@ import requests
 creds = {"username": "quota73", "password": "test"}
 wrong = {"username": "quota73", "password": "tset"}
 r = requests.Session()
-registered = False
+registered = True
 if not registered:
     a=r.post("http://localhost:39472/register", json=creds)
     print(a.status_code, a.text)
-
 
 b=r.post("http://localhost:39472/login", json=creds)
 print(b.status_code, b.json())
