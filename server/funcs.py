@@ -2,12 +2,12 @@ import jwt, datetime, hashlib, random, json_helper, logging
 log = logging.Logger(__name__)
 usermgr = json_helper.JSONManager("./users.json")
 msgmgr = json_helper.JSONManager("./conversations.json")
-def generate_token(username:str, SECRET_KEY:str|bytes):
+def generate_token(username:str, SECRET_KEY:bytes):
     expiration = datetime.datetime.utcnow() + datetime.timedelta(days=30)
     token = jwt.encode({'username': username, 'exp': expiration}, SECRET_KEY, algorithm="HS256")
     return token
 
-def register_user(username:str, password:str, key:str|bytes):
+def register_user(username:str, password:str, key:bytes):
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     token = generate_token(username, key)
     
@@ -23,7 +23,7 @@ def update_token_in_db(username:str, new_token:str):
     log.debug(f"User @{username} generated new token.")
     usermgr.update_data(username, [data[0], new_token])
 
-def login_user(username:str, password:str, key:str|bytes):
+def login_user(username:str, password:str):
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     user:None|list[str, str] = usermgr.get_key(username, default=None)
     if user:
@@ -37,7 +37,7 @@ def login_user(username:str, password:str, key:str|bytes):
         log.debug(f"Someone tried to login as @{username}, but the user doesn't exist.")
         return None
 
-def verify_token(token:str, SECRET_KEY:str|bytes) -> dict[str, str|datetime.datetime] | None:
+def verify_token(token:str, SECRET_KEY:bytes) -> dict[str, str|datetime.datetime] | None:
     try:
         payload:dict[str, str|datetime.datetime] = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         log.debug("Token check passed.")
@@ -56,7 +56,7 @@ def get_conversation(id:str) -> dict[str, str] | None:
     else:
         return None
 
-def message(conversation: str, token: str, content: str, key: str|bytes) -> dict[str, str] | None:
+def message(conversation: str, token: str, content: str, key: bytes) -> dict[str, str] | None:
     conv: dict[str, str|dict[str, str]] = msgmgr.get_key(conversation)
     if conv:
         user = verify_token(token, key)["username"]
@@ -74,7 +74,7 @@ def message(conversation: str, token: str, content: str, key: str|bytes) -> dict
             log.warning("User tried to message conversation they couldn't access.")
             return None
 
-def get_converastions(token: str, key: str|bytes) -> list:
+def get_converastions(token: str, key: bytes) -> list:
     tuser = verify_token(token, key)
     if tuser:
         user:list[str, str, dict[str, str]] = usermgr.get_key(tuser["username"])
@@ -89,7 +89,7 @@ def add_conversation_to_user(user: str, id: str) -> None:
     return None
     """This feels WAY too simple."""
 
-def create_converastion(members: list[str], title:str, token:str, key:str|bytes) -> str:
+def create_converastion(members: list[str], title:str, token:str, key:bytes) -> str:
     user = verify_token(token, key)
     if user:
         id = generate_id()
