@@ -75,7 +75,11 @@ def handle_message(msg:str) -> None:
             if sessions.get(request.sid):
                 if data.get("conversation"):
                     if data.get("content"):
-                        messag(conversation=data.get("conversation"), token=sessions.get(request.sid), content=data.get("content"), key=SECRET_KEY)
+                        _msg = messag(conversation=data.get("conversation"), token=sessions.get(request.sid), content=data.get("content"), key=SECRET_KEY)
+                        if _msg:
+                            emit('response', _msg)
+                        else:
+                            emit('response', {'error': 'Unlogged error, check debug log.'})
                     else:
                         emit('response', {'error': 'You must provide message content to send messages.'})
                 else:
@@ -117,5 +121,5 @@ def addconv():
     """THIS feels WAY TOO EASY"""
     """I swear it isn't done, yet it looks like it is.."""
     """I think I'm going insane."""
-
-socketio.run(app=app, host="0.0.0.0", port=39472, debug=True, load_dotenv=False)
+app.run()
+socketio.run(app=app, host="0.0.0.0", port=39472, debug=True)
