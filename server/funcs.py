@@ -56,7 +56,7 @@ def get_conversation(id:str) -> dict[str, str] | None:
     else:
         return None
 
-def message(conversation: str, token: str, content: str, key: bytes) -> dict[str, str] | None:
+def message(conversation: str, token: str, content: str, key: bytes) -> tuple[dict[str, str], dict[str, dict[str, str]]] | None:
     conv: dict[str, str|dict[str, str]] = msgmgr.get_key(conversation)
     if conv:
         user = verify_token(token, key)["username"]
@@ -66,7 +66,7 @@ def message(conversation: str, token: str, content: str, key: bytes) -> dict[str
                 id = generate_id()
                 conv["messages"].update({id: { "user": user, "content": content }})
                 msgmgr.update_data(conversation, conv)
-                return {id: { "user": user, "content": content }}
+                return {id: { "user": user, "content": content }}, {conversation: {id: { "user": user, "content": content }}}
             else:
                 log.warning(f"Message from @{user} was too long!")
                 return None

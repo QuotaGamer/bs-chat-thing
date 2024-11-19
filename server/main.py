@@ -101,7 +101,8 @@ def message():
     else:
         msg = messag(id, token, content, SECRET_KEY)
         if msg:
-            return jsonify(msg), 200
+            print(msg[1])
+            return jsonify(msg[0]), 200
         else:
             return jsonify({"message": "Invalid token."}), 401
 
