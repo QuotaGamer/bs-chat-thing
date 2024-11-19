@@ -83,7 +83,7 @@ def get_converastions(token: str, key: bytes) -> list:
         return None
 
 def add_conversation_to_user(user: str, id: str) -> None:
-    _user:list[str, str, list[str]] = usermgr.get_key(user)
+    _user:tuple[str, str, list[str]] = usermgr.get_key(user) # It's actually a list, I did this so my LSP would stop saying that I was trying to index a string
     _user[2].append(id)
     usermgr.update_data(user, _user)
     return None
