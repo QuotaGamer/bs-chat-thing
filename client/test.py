@@ -1,6 +1,5 @@
 import requests
 creds = {"username": "quota73", "password": "test"}
-wrong = {"username": "quota73", "password": "tset"}
 r = requests.Session()
 registered = True
 if not registered:

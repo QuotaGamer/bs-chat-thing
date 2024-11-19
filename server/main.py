@@ -5,7 +5,6 @@ from flask_socketio import SocketIO, emit, disconnect
 from os.path import exists as path_exist
 from os import urandom as rand, chmod as mod
 from typing import Union
-from datetime import datetime
 import json
 def getkey() -> bytes:
     if path_exist("./secret"):

@@ -3,7 +3,7 @@ log = logging.Logger(__name__)
 usermgr = json_helper.JSONManager("./users.json")
 msgmgr = json_helper.JSONManager("./conversations.json")
 def generate_token(username:str, SECRET_KEY:bytes):
-    expiration = datetime.datetime.utcnow() + datetime.timedelta(days=30)
+    expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
     token = jwt.encode({'username': username, 'exp': expiration}, SECRET_KEY, algorithm="HS256")
     return token
 
